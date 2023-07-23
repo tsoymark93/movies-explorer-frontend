@@ -1,8 +1,8 @@
-.movies__card {
+.movie-card {
     display: grid;
     background-color: #222222;
 }
-.movies__card-info {
+.movie-card__info {
     padding: 14px;
     display: grid;
     grid-template-areas:
@@ -11,7 +11,7 @@
     ;
 }
   
-.movies__card-name {
+.movie-card__name {
     margin: 0;
     padding-bottom: 9px;
     grid-area: movie-name;
@@ -20,7 +20,7 @@
     font-style: normal;
 }
   
-.movies__card-duration {
+.movie-card__duration {
     margin: 0;
     grid-area: movie-duration;
     font-size: 11px;
@@ -29,7 +29,7 @@
     color: #8B8B8B
 }
   
-.movies__card-button {
+.movie-card__button {
     position: relative;
     width: 30px;
     height: 30px;
@@ -45,19 +45,19 @@
     cursor: pointer;
 }
 
-.movies__card-button_liked {
+.movie-card__button_liked {
     background-color: #3DDC84;
     background-image: url('../../images/button-like-active.svg');
     background-repeat: no-repeat;
     background-position: center;
 }
 
-.movies__card-button_type_liked {
+.movie-card__button_type_liked {
     background-size: 12px;
     background-image: url('../../images/CLOSE.svg');
 }
 
-.movies__card-image {
+.movie-card__image {
     width: 100%;
     object-fit: cover;
 }

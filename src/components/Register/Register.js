@@ -14,7 +14,7 @@ const Register = () => (
         </div>
         <AuthSubmit
             textButton="Зарегестрироваться"
-            textPreLink="Уже зарегестрированы?"
+            textPreLink="Уже зарегестрированы? "
             textLink="Войти"
             urlLinkSubmit="/signin"
         />

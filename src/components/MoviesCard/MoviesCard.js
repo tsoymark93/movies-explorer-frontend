@@ -10,18 +10,18 @@ const MoviesCard = ({ mode }) => {
     }
 
     return (
-        <li className="movies__card">
-            <div className="movies__card-info">
-                <p className="movies__card-name">33 слова о дизайне</p>
-                <p className="movies__card-duration">1ч 47м</p>
+        <li className="movie-card">
+            <div className="movie-card__info">
+                <p className="movie-card__name">33 слова о дизайне</p>
+                <p className="movie-card__duration">1ч 47м</p>
                 <button
-                    className={`movies__card-button ${liked ? 'movies__card-button_liked' : ''} ${
-                        mode === 'liked' ? 'movies__card-button_type_liked' : ''
+                    className={`movie-card__button ${liked ? 'movie-card__button_liked' : ''} ${
+                        mode === 'liked' ? 'movie-card__button_type_liked' : ''
                     }`}
                     onClick={toggleLikedState}
-                ></button>{' '}
+                ></button>
             </div>
-            <img className="movies__card-image" src={testImage} alt="Фото"></img>
+            <img className="movie-card__image" src={testImage} alt="Постер фильма: 33 слова о дизайне" />
         </li>
     );
 };

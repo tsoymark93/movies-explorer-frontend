@@ -1,6 +1,6 @@
 import React from 'react';
 import './MoviesCards.css';
 
-const MoviesCards = ({ children }) => <ul className="movies__cards">{children}</ul>;
+const MoviesCards = ({ children }) => <section className="movies__cards">{children}</section>;
 
 export default MoviesCards;

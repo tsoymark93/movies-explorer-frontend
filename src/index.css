@@ -28,3 +28,7 @@
 .hidden {
   display: none;
 }
+
+.input:focus {
+  outline: 2px solid #3DDC84;
+}

@@ -66,12 +66,15 @@
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
-
+    letter-spacing: -0.73px;
+    line-height: 29px;
 }
 
     @media screen and (min-width: 768px) {
         .portfolio__link {
             font-size: 28px;
+            letter-spacing: -1.2px;
+            line-height: 50px;
         }   
     }
 

@@ -7,6 +7,7 @@
     justify-content: center;
     column-gap: 13px;
     align-items: center;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {
@@ -27,7 +28,6 @@
     appearance: none;
     height: 20px;
     width: 36px;
-    margin: 0;
     border-radius: 16px;
     background-image: url(../../images/tumbler-off.svg);
     background-repeat: no-repeat;
@@ -37,6 +37,14 @@
     cursor: pointer;
     color: #A0A0A0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-top: -4px;
+    margin-right: -1px;
+}
+
+@media screen and (min-width: 768px) {
+    .checkbox__switcher {
+        margin-right: 3px;
+    }
 }
 
 .checkbox__switcher:checked {

@@ -12,7 +12,6 @@ const Profile = () => (
             <AuthInput name="Имя" idName="name" type="type" value={'Марк'} isProfile={true} />
             <AuthInput name="E-mail" idName="email" type="email" value={'test@test.com'} isProfile={true} />
         </div>
-        <div></div>
         <AuthSubmit textButton="Редактировать" textPreLink="" textLink="Выйти из аккаунта" isProfile={true} />
     </>
 );
