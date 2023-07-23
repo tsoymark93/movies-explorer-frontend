@@ -1,0 +1,172 @@
+.project {
+    width: 100%;
+    display: grid;
+    padding: 0 18px 70px;
+    justify-self: center;
+    box-sizing: border-box;
+}
+
+    @media screen and (min-width: 768px) {
+        .project {
+            padding: 0 50px 90px;
+        }
+    }
+
+    @media screen and (min-width: 1280px) {
+        .project {
+            width: 1280px;
+            padding: 0 70px 110px;
+        }
+    } 
+
+.project__title {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    margin: 0;
+    padding-top: 70px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #DADADA;
+}
+
+    @media screen and (min-width: 768px) {
+        .project__title {
+            padding-top: 90px;
+            padding-bottom: 23px;
+            font-size: 22px;
+        }
+    }
+
+    @media screen and (min-width: 1280px) {
+        .project__title {
+            padding-top: 110px;
+        }
+    } 
+
+.project__description {
+    margin: 0;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+    @media screen and (min-width: 768px) {
+        .project__description {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (min-width: 1280px) {
+        .project__description {
+            font-size: 14px;
+        }
+    } 
+
+.about-project__points {
+    display: grid;
+    margin: 0;
+    padding: 60px 0 0;
+    row-gap: 56px;
+    list-style-type: none;
+}
+
+    @media screen and (min-width: 768px) {
+        .about-project__points {
+            padding: 70px 0 0;
+            column-gap: 30px;
+            row-gap: 30px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media screen and (min-width: 1280px) {
+        .about-project__points {
+            column-gap: 40px;
+            row-gap: 40px;
+        }
+    } 
+
+.about-project__point-title {
+    padding-top: 0;
+    padding-bottom: 16px;
+    border-bottom: none;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+    @media screen and (min-width: 768px) {
+        .about-project__point-title {
+            padding-bottom: 22px;
+            font-size: 20px;
+        }
+    }
+
+    @media screen and (min-width: 1280px) {
+        .about-project__point-title {
+            padding-bottom: 26px;
+        }
+    } 
+
+.about-project__schedules {
+    display: grid;
+    padding: 0;
+    margin: 60px 0 0;
+    grid-template-columns: 100px 1fr;
+}
+
+    @media screen and (min-width: 768px) {
+        .about-project__schedules {
+            margin: 93px 0 0;
+            grid-template-columns: 140px 1fr;
+        }
+    }
+
+    @media screen and (min-width: 1280px) {
+        .about-project__schedules {
+            margin: 110px 0 0;
+            grid-template-columns: 228px 1fr;
+        }
+    } 
+
+.about-project__schedule {
+    display: grid;
+    row-gap: 10px;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+    @media screen and (min-width: 768px) {
+        .about-project__schedule {
+            row-gap: 15px;
+            font-size: 14px;
+        }
+    }
+
+.about-project__schedule-period {
+    margin: 0;
+    padding: 11px 10px;
+    background-color: #3DDC84;
+    text-align: center;
+}
+
+    @media screen and (min-width: 768px) {
+        .about-project__schedule-period {
+            padding: 9px 10px;
+        }
+    }
+
+.about-project__schedule-title {
+    margin: 0;
+    color: #A0A0A0;
+    text-align: center;
+}
+
+.about-project__schedule:last-child .about-project__schedule-period {
+    background-color: #303030;
+}
+
+.about-project__schedule:first-child .about-project__schedule-period {
+    color: black;
+}
