@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './AuthInput.css';
-import useInput from '../../utils/useInput';
 
-const AuthInput = ({ name, idName, type, value, isProfile = false }) => {
-    const input = useInput({ inputValue: value });
-    const [isPasswordValid, setIsPasswordValid] = useState(true);
+const AuthInput = ({ name, idName, type, value, isProfile = false, onChange, disabled }) => {
+    const isPassword = type === 'password';
+    const isPasswordValid = isPassword ? value.length > 6 : true;
 
     const classContainer = `auth__input-container${isProfile ? ' auth__input-container_type_profile' : ''}`;
     const classLabel = `auth__label${isProfile ? ' auth__label_type_profile' : ''}`;
     const classInput = `auth__input${isProfile ? ' auth__input_type_profile' : ''}`;
     const classInputError = `auth__input-error${isProfile ? ' auth__input-error_type_profile' : ''}`;
 
-    const validatePassword = (password) => password.length > 6; // Пример проверки: пароль должен быть длиннее 6 символов
     const handleInputChange = (event) => {
         const inputValue = event.target.value;
-        input.onChange(event);
-
-        if (type === 'password') {
-            // Проверяем валидацию пароля и устанавливаем состояние isPasswordValid
-            setIsPasswordValid(validatePassword(inputValue));
-        }
+        onChange(inputValue); // Вызываем переданный извне обработчик onChange
     };
 
     return (
@@ -28,19 +21,20 @@ const AuthInput = ({ name, idName, type, value, isProfile = false }) => {
                 {name}
             </label>
             <input
-                className={`${classInput} ${type === 'password' && !isPasswordValid ? 'auth__input_error' : ''}`}
+                className={`${classInput} ${isPassword && !isPasswordValid ? 'auth__input_error' : ''}`}
                 id={`auth-${idName}`}
                 placeholder={name}
                 type={type}
-                value={input.value}
+                value={value}
                 onChange={handleInputChange}
+                disabled={disabled} // Используем переданное извне свойство disabled
             />
-            {type === 'password' && !isPasswordValid && (
+            {isPassword && !isPasswordValid && (
                 <span className={`${classInputError} auth__input-error_active`}>
                     Пароль должен быть длиннее 6 символов
                 </span>
             )}
-            {type !== 'password' && <span className={classInputError}></span>}
+            {!isPassword && <span className={classInputError}></span>}
         </div>
     );
 };

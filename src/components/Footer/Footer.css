@@ -30,7 +30,7 @@
     .footer__container {
         padding: 0 70px;
         justify-self: center;
-        width: 1280px;
+        max-width: 1280px;
     }
 }
 

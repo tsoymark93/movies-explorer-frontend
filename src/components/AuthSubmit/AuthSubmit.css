@@ -17,7 +17,8 @@
     font-style: normal;
     font-weight: 500;
     border-radius: 3px;
-    color: white
+    color: white;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {
@@ -43,6 +44,34 @@
         font-size: 13px;
     }
 }
+
+.auth__button-submit_type_profile-save {
+    padding: 15px;
+    margin-bottom: 14px;
+    border: none;
+    background-color: #4285F4;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+    .auth__button-submit_type_profile-save {
+        padding: 13px 15px 15px;
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+}
+.link.auth__button-submit.auth__button-submit_type_profile.disabled {
+    background-color: #f8f8f8;
+    color: #c2c2c2;
+    cursor: not-allowed; /* Добавьте этот стиль, чтобы курсор менялся на "запрещен" при неактивной кнопке */
+    pointer-events: none; /* Используйте этот стиль, чтобы кнопка была неактивной для кликов */
+  }
+
 
 .auth__text {
     width: 100%;
