@@ -1,11 +1,11 @@
 {
   "env": {
     "browser": true,
-    "commonjs": true,
+    // "commonjs": true,
     "es2021": true
   },
   "extends": [
-    "airbnb-base",
+    // "airbnb-base",
     "eslint:recommended",
     "plugin:react/recommended",
     "prettier"
@@ -21,8 +21,11 @@
     "prettier"
   ],
   "rules": {
-    "no-underscore-dangle": ["error",{"allow":["_id"]}],
-    "prettier/prettier": "error", // Подсвечивает ошибки из Prettier
-    "react/prop-types": 0 // Отключаем правило проверки передаваемых типов.
+    "prettier/prettier": "error",
+    "react/prop-types": 0,
+    "import/prefer-default-export": "off",
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+    "prefer-promise-reject-errors": "off"
   }
 }

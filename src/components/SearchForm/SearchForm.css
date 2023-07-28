@@ -45,7 +45,7 @@
 .search-form__container {
     border: 1.5px solid rgba(170, 170, 170, 0.2);
     border-radius: 50px;
-    min-width: 300px;
+    min-width: 297px;
     height: 48px;
     display: flex;
     flex-direction: row;

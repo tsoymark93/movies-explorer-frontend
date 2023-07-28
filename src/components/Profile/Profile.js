@@ -15,14 +15,27 @@ const Profile = () => {
 
     const validateForm = () => {
         const errors = [];
-        if (isEditMode && username.trim() === '') {
-            errors.push('Пожалуйста, введите корректное имя.');
-        }
-        if (isEditMode && email.trim() === '') {
-            errors.push('Пожалуйста, введите корректный email.');
-        }
-        if (isEditMode && email.indexOf('@') === -1) {
-            errors.push('Пожалуйста, введите корректный email.');
+
+        const trimmedUsername = username.trim();
+        const trimmedEmail = email.trim();
+
+        const nameRegex = /^[A-Za-zА-Яа-яЁё\s-]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (isEditMode) {
+            if (trimmedUsername === '') {
+                errors.push('Пожалуйста, введите имя.');
+            } else if (!nameRegex.test(trimmedUsername)) {
+                errors.push('Имя может содержать только буквы, пробелы и дефисы.');
+            } else if (trimmedUsername.length < 2) {
+                errors.push('Имя должно содержать минимум две буквы.');
+            }
+
+            if (trimmedEmail === '') {
+                errors.push('Пожалуйста, введите email.');
+            } else if (!emailRegex.test(trimmedEmail)) {
+                errors.push('Пожалуйста, введите корректный email.');
+            }
         }
 
         // Устанавливаем состояние активности кнопки в зависимости от наличия ошибок
@@ -30,6 +43,7 @@ const Profile = () => {
 
         // Устанавливаем новый массив сообщений об ошибках
         setErrorMessages([...errors]);
+
         return errors.length === 0;
     };
 

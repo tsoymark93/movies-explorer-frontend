@@ -24,3 +24,24 @@
         padding: 70px 70px 30px;
     }
 }
+
+.movies__card-list-title {
+    margin: 0;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    .movies__card-list-title {
+        font-size: 30px;
+        grid-column: 1 / span 2;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .movies__card-list-title {
+        grid-column: 1 / span 3;
+    }
+}

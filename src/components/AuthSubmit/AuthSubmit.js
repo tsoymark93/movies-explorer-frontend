@@ -11,6 +11,7 @@ const AuthSubmit = ({
     onClick,
     customStyleClass,
     disabled,
+    textInfoSubmit,
 }) => {
     const classContainer = `auth__submit-container${isProfile ? ' auth__submit-container_type_profile' : ''}`;
     const classButton = `link auth__button-submit${isProfile ? ' auth__button-submit_type_profile' : ''} ${
@@ -21,6 +22,7 @@ const AuthSubmit = ({
 
     return (
         <div className={classContainer}>
+            <span className="auth__submit-error">{textInfoSubmit}</span>{' '}
             <button
                 className={`${classButton} ${disabled ? 'disabled' : ''}`}
                 type="button"
