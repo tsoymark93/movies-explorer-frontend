@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Profile.css';
 import '../Auth/Auth.css';
 import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthInput from '../AuthInput/AuthInput';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 const Profile = () => {
-    const [username, setUsername] = useState('Марк');
-    const [email, setEmail] = useState('test@test.com');
+    // Используем хук useContext для получения значения из контекста
+    const currentUser = useContext(CurrentUserContext);
+
+    // Инициализируем состояния с данными пользователя из контекста
+    const [username, setUsername] = useState(currentUser.name);
+    const [email, setEmail] = useState(currentUser.email);
     const [isEditMode, setIsEditMode] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
     const saveButtonStyleClass = 'auth__button-submit_type_profile-save';

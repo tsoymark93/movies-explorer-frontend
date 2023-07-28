@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './Register.css';
 import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
 import AuthInput from '../AuthInput/AuthInput';
 import { validateName, validateEmail, validatePassword } from '../../utils/validation';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
-    const [name, setName] = useState('Марк');
-    const [email, setEmail] = useState('test@test.com');
+    const currentUser = useContext(CurrentUserContext);
+
+    const [name, setName] = useState(currentUser.name || '');
+    const [email, setEmail] = useState(currentUser.email || '');
     const [password, setPassword] = useState('');
     const [isEmailValid, setIsEmailValid] = useState(true);
     const [isPasswordValid, setIsPasswordValid] = useState(true);

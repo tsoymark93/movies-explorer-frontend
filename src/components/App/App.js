@@ -19,9 +19,10 @@ function App() {
     const location = useLocation();
     const history = useNavigate();
     const [currentUser, setCurrentUser] = useState({
-        name: 'user',
+        name: '',
         isLoggedIn: false,
         email: '',
+        _id: '',
     });
     const [isLoader, setIsLoader] = useState(false);
     //  const [isTokenChecked, setIsTokenChecked] = useState(false);
