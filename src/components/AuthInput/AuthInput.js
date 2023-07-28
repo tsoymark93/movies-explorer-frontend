@@ -4,6 +4,9 @@ import './AuthInput.css';
 const AuthInput = ({ name, idName, type, value, isProfile = false, onChange, disabled, isValid }) => {
     const classContainer = `auth__input-container${isProfile ? ' auth__input-container_type_profile' : ''}`;
     const classLabel = `auth__label${isProfile ? ' auth__label_type_profile' : ''}`;
+    const classInput = `auth__input ${isValid ? '' : 'auth__input-error-active'}${
+        isProfile ? ' auth__input_type_profile' : ''
+    }`;
 
     const handleInputChange = (event) => {
         const inputValue = event.target.value;
@@ -16,7 +19,7 @@ const AuthInput = ({ name, idName, type, value, isProfile = false, onChange, dis
                 {name}
             </label>
             <input
-                className={`auth__input ${isValid ? '' : 'auth__input-error-active'}`}
+                className={classInput}
                 id={`auth-${idName}`}
                 placeholder={name}
                 type={type}
