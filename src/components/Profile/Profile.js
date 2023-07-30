@@ -6,7 +6,7 @@ import AuthInput from '../AuthInput/AuthInput';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-const Profile = () => {
+const Profile = ({ onSignOut, onUpdateUser }) => {
     // Используем хук useContext для получения значения из контекста
     const currentUser = useContext(CurrentUserContext);
 
@@ -60,6 +60,15 @@ const Profile = () => {
         return errors.length === 0;
     };
 
+    const handleSubmit = (evt) => {
+        evt.preventDefault();
+
+        onUpdateUser({
+            email: email,
+            name: username,
+        });
+    };
+
     useEffect(() => {
         if (!isEditMode) {
             setErrorMessages([]);
@@ -78,68 +87,71 @@ const Profile = () => {
     };
 
     return (
-        <form className="auth__form auth__form_type_profile" noValidate>
-            <AuthTitle title={`Привет, ${username}!`} isProfile={true} />
-            {errorMessages.length > 0 && (
-                <div className="auth__form_type_profile-error-messages">
-                    {errorMessages.map((error, index) => (
-                        <span key={index} className="auth__form_type_profile-error-message">
-                            {error}
-                        </span>
-                    ))}
-                </div>
-            )}
-            <div className={`auth__inputs auth__inputs_type_profile ${isEditMode ? 'editing' : ''}`}>
-                <AuthInput
-                    name="Имя"
-                    idName="name"
-                    type="type"
-                    value={username}
-                    isProfile={true}
-                    onChange={(value) => {
-                        setUsername(value);
-                        validateForm();
-                    }}
-                    disabled={!isEditMode}
-                    isValid={isUsernameValid}
-                />
+        <main className="auth">
+            <form className="auth__form auth__form_type_profile" onSubmit={handleSubmit} noValidate>
+                <AuthTitle title={`Привет, ${username}!`} isProfile={true} />
+                {errorMessages.length > 0 && (
+                    <div className="auth__form_type_profile-error-messages">
+                        {errorMessages.map((error, index) => (
+                            <span key={index} className="auth__form_type_profile-error-message">
+                                {error}
+                            </span>
+                        ))}
+                    </div>
+                )}
+                <div className={`auth__inputs auth__inputs_type_profile ${isEditMode ? 'editing' : ''}`}>
+                    <AuthInput
+                        name="Имя"
+                        idName="name"
+                        type="type"
+                        value={username}
+                        isProfile={true}
+                        onChange={(value) => {
+                            setUsername(value);
+                            validateForm();
+                        }}
+                        disabled={!isEditMode}
+                        isValid={isUsernameValid}
+                    />
 
-                <AuthInput
-                    name="E-mail"
-                    idName="email"
-                    type="email"
-                    value={email}
-                    isProfile={true}
-                    onChange={(value) => {
-                        setEmail(value);
-                        validateForm();
-                    }}
-                    disabled={!isEditMode}
-                    isValid={isEmailValid}
-                />
-            </div>
-            {isEditMode ? (
-                <AuthSubmit
-                    textButton="Сохранить"
-                    textPreLink=""
-                    textLink=""
-                    isProfile={true}
-                    urlLinkSubmit=""
-                    onClick={handleSaveProfile}
-                    customStyleClass={saveButtonStyleClass}
-                    disabled={!isSaveButtonActive}
-                />
-            ) : (
-                <AuthSubmit
-                    textButton="Редактировать"
-                    textPreLink=""
-                    textLink="Выйти из аккаунта"
-                    isProfile={true}
-                    urlLinkSubmit="/logout"
-                    onClick={toggleEditing}
-                />
-            )}
-        </form>
+                    <AuthInput
+                        name="E-mail"
+                        idName="email"
+                        type="email"
+                        value={email}
+                        isProfile={true}
+                        onChange={(value) => {
+                            setEmail(value);
+                            validateForm();
+                        }}
+                        disabled={!isEditMode}
+                        isValid={isEmailValid}
+                    />
+                </div>
+                {isEditMode ? (
+                    <AuthSubmit
+                        textButton="Сохранить"
+                        textPreLink=""
+                        textLink=""
+                        isProfile={true}
+                        urlLinkSubmit=""
+                        onClick={handleSaveProfile}
+                        customStyleClass={saveButtonStyleClass}
+                        disabled={!isSaveButtonActive}
+                    />
+                ) : (
+                    <AuthSubmit
+                        textButton="Редактировать"
+                        textPreLink=""
+                        textLink="Выйти из аккаунта"
+                        isProfile={true}
+                        urlLinkSubmit="/logout"
+                        onClick={toggleEditing}
+                        onSignOut={onSignOut}
+                    />
+                )}
+            </form>
+        </main>
     );
 };
 

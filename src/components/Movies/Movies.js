@@ -7,6 +7,7 @@ import { moviesApi } from '../../utils/MoviesApi';
 import { filterMovies } from '../../utils/utils';
 import RenderMovies from '../RenderMovies/RenderMovies';
 import useMoviesDiplay from '../../utils/useMoviesDisplay';
+import Preloader from '../Preloader/Preloader';
 
 const Movies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
     const [isLoader, setIsLoader] = useState(false);
@@ -57,6 +58,7 @@ const Movies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
                 isChecked={isChecked}
                 initialName={initialNameValue()}
             ></SearchForm>
+            {isLoader ? <Preloader /> : ''}
             <MoviesCardList>
                 <RenderMovies
                     movies={movies}

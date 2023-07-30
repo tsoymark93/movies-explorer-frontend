@@ -5,7 +5,7 @@ import useInput from '../../utils/useInput';
 import { useLocation } from 'react-router-dom';
 
 const SearchForm = ({ onSubmit, onInputSearchError, initialName = '', isChecked, handleInputChecked }) => {
-    const searchInput = useInput({});
+    const searchInput = useInput({ inputValue: initialName });
     const location = useLocation();
     const handleSubmit = (evt) => {
         evt.preventDefault();

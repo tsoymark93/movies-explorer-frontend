@@ -14,37 +14,90 @@ import './App.css';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { mainApi } from '../../utils/MainApi';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
     const location = useLocation();
-    const history = useNavigate();
+    const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState({
         name: '',
-        isLoggedIn: false,
+        isLoggedIn: true,
         email: '',
         _id: '',
     });
     const [isLoader, setIsLoader] = useState(false);
-    //  const [isTokenChecked, setIsTokenChecked] = useState(false);
+    const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [errorSubmitApi, setErrorSubmitApi] = useState('');
     const [isFooterDisabled, setIsFooterDisabled] = useState(false);
     const routesFootersDisabled = ['/signin', '/signup', '/profile', '/404'];
     const [isHeaderDisabled, setIsHeaderDisabled] = useState(false);
     const routesHeaderDisabled = ['/404'];
 
-    /*
-  useEffect(() => {
-    if (currentUser.isLoggedIn && isTokenChecked) {
-      Promise.all([api.getUser(), api.getInitialCards()])
-        .then(([user, dataCards]) => {
-          setCurrentUser({ ...currentUser, ...user });
-          setCards([...dataCards]);
-        })
-        .then(() => history.push('/'))
-        .catch((err) => console.log(err));
-    }
-  }, [isTokenChecked, currentUser.isLoggedIn]);
-*/
+    const checkToken = async (token) => {
+        mainApi
+            .getUser(token)
+            .then((res) => {
+                if (res) {
+                    setCurrentUser({
+                        ...currentUser,
+                        isLoggedIn: true,
+                        ...res,
+                    });
+                }
+            })
+            .catch((err) => console.log(err))
+            .finally(() => setIsTokenChecked(true));
+    };
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            checkToken(token);
+        } else {
+            setIsTokenChecked(true);
+        }
+    }, [currentUser.isLoggedIn]);
+
+    const getUser = (token) => {
+        return mainApi
+            .getUser(token)
+            .then((user) => {
+                setCurrentUser({ ...user, isLoggedIn: true });
+            })
+            .catch((res) => {
+                res.then((err) => {
+                    onSignOut();
+                    console.log(err.message);
+                });
+            });
+    };
+
+    const onUpdateUser = ({ email, name }) => {
+        setIsLoader(true);
+        return mainApi
+            .updateUser({ email, name })
+            .then((data) => {
+                setCurrentUser({ ...currentUser, name: data.name, email: data.email });
+                setInfoTooltipProps({
+                    ...infoTooltipProps,
+                    message: 'Данные успешно обновлены.',
+                    buttonText: 'OK',
+                    isError: false,
+                    onSubmit: closePopup,
+                });
+                infoTooltipOpen();
+            })
+            .catch((res) => {
+                res.then((err) => {
+                    console.log(err.message);
+                    setErrorSubmitApi(err.message);
+                });
+            })
+            .finally(() => {
+                setIsLoader(false);
+            });
+    };
 
     const onLogin = ({ email, password }) => {
         setIsLoader(true);
@@ -53,7 +106,8 @@ function App() {
             .then((data) => {
                 localStorage.setItem('token', data.token);
                 setCurrentUser({ ...currentUser, isLoggedIn: true });
-                history.push('/movies');
+                getUser(data.token);
+                navigate('/movies');
             })
             .catch((res) => {
                 res.then((err) => {
@@ -86,21 +140,15 @@ function App() {
             });
     };
 
-    // const checkToken = async (token) => {
-    //     mainApi
-    //         .getUser(token)
-    //         .then((res) => {
-    //             if (res) {
-    //                 setCurrentUser({
-    //                     ...currentUser,
-    //                     isLoggedIn: true,
-    //                     ...res,
-    //                 });
-    //             }
-    //         })
-    //         .catch((err) => console.log(err))
-    //         .finally(() => setIsTokenChecked(true));
-    // };
+    const onSignOut = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('name');
+        localStorage.removeItem('checkbox');
+        localStorage.removeItem('movies');
+        setIsTokenChecked(false);
+        setCurrentUser({ name: '', isLoggedIn: false, email: '', _id: '' });
+        navigate('/');
+    };
 
     const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
     const [infoTooltipProps, setInfoTooltipProps] = useState({
@@ -152,33 +200,45 @@ function App() {
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="App">
-                {!isHeaderDisabled && <Header />}
+                {!isHeaderDisabled && <Header isLoggedIn={currentUser.isLoggedIn} />}
                 <Routes>
                     <Route path="/" element={<Main />} />
                     <Route
                         path="/movies"
                         element={
-                            <Movies
-                                onInputSearchError={onInputSearchError}
-                                errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
-                            />
+                            <ProtectedRoute>
+                                <Movies
+                                    onInputSearchError={onInputSearchError}
+                                    errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
+                                    isTokenChecked={isTokenChecked}
+                                />
+                            </ProtectedRoute>
                         }
                     />
                     <Route
                         path="/saved-movies"
                         element={
-                            <SavedMovies
-                                onInputSearchError={onInputSearchError}
-                                errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
-                            />
+                            <ProtectedRoute>
+                                <SavedMovies
+                                    onInputSearchError={onInputSearchError}
+                                    errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
+                                    isTokenChecked={isTokenChecked}
+                                />
+                            </ProtectedRoute>
                         }
                     />
                     <Route
                         path="/profile"
                         element={
-                            <Auth isProfile={true}>
-                                <Profile />
-                            </Auth>
+                            <ProtectedRoute isProfile={true}>
+                                <Profile
+                                    isLoader={isLoader}
+                                    onSignOut={onSignOut}
+                                    onUpdateUser={onUpdateUser}
+                                    errorSubmitApi={errorSubmitApi}
+                                    isTokenChecked={isTokenChecked}
+                                />
+                            </ProtectedRoute>
                         }
                     />
                     <Route

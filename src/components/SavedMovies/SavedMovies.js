@@ -5,6 +5,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import { moviesApi } from '../../utils/MoviesApi';
 import { filterMovies } from '../../utils/utils';
 import RenderMovies from '../RenderMovies/RenderMovies';
+import Preloader from '../Preloader/Preloader';
 
 const SavedMovies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
     const [isChecked, setIsChecked] = useState(false);
@@ -43,6 +44,7 @@ const SavedMovies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
                 onInputSearchError={onInputSearchError}
                 handleInputChecked={handleInputChecked}
             />
+            {isLoader ? <Preloader /> : ''}
             <MoviesCardList>
                 <RenderMovies movies={movies} isLoader={isLoader} isChecked={isChecked} />
             </MoviesCardList>
