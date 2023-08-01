@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.17ead167.css",
-    "main.js": "/static/js/main.8b5ad2c1.js",
+    "main.css": "/static/css/main.30cd31d3.css",
+    "main.js": "/static/js/main.ec82c889.js",
     "static/js/787.14e4bc02.chunk.js": "/static/js/787.14e4bc02.chunk.js",
     "static/media/landing-logo.svg": "/static/media/landing-logo.0f96ee2330db430fa10288cf9aef74db.svg",
     "static/media/photo.png": "/static/media/photo.7c0043b2297cf8f04452.png",
@@ -22,12 +22,12 @@
     "static/media/arrow.svg": "/static/media/arrow.df4728086c2add652b48.svg",
     "static/media/tumb__COLOR_tumbler-on.svg": "/static/media/tumb__COLOR_tumbler-on.28a196e6d5a3aae564ea.svg",
     "static/media/tumbler-off.svg": "/static/media/tumbler-off.6c870c055315f4c049a8.svg",
-    "main.17ead167.css.map": "/static/css/main.17ead167.css.map",
-    "main.8b5ad2c1.js.map": "/static/js/main.8b5ad2c1.js.map",
+    "main.30cd31d3.css.map": "/static/css/main.30cd31d3.css.map",
+    "main.ec82c889.js.map": "/static/js/main.ec82c889.js.map",
     "787.14e4bc02.chunk.js.map": "/static/js/787.14e4bc02.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.17ead167.css",
-    "static/js/main.8b5ad2c1.js"
+    "static/css/main.30cd31d3.css",
+    "static/js/main.ec82c889.js"
   ]
 }
