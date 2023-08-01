@@ -34,9 +34,9 @@ const HeaderNav = ({ isMain }) => {
                         Сохранённые фильмы
                     </NavLink>
                 </nav>
-                <a className={`link navigation__profile${classNavigationProfileMenu}`} href="/profile">
+                <NavLink className={`link navigation__profile${classNavigationProfileMenu}`} to="/profile">
                     Аккаунт
-                </a>
+                </NavLink>
             </div>
         </div>
     );

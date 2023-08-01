@@ -304,7 +304,6 @@ function App() {
                         path="/profile"
                         element={
                             <ProtectedRoute
-                                // isProfile={true}
                                 isLoggedIn={currentUser.isLoggedIn}
                                 element={Profile}
                                 isLoader={isProfileLoader}
