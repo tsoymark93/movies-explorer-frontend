@@ -43,15 +43,7 @@ function App() {
 
     useEffect(() => {
         if (isTokenChecked && currentUser.isLoggedIn) {
-            // Если пользователь залогинен, и он пытается зайти на страницу авторизации или регистрации, перенаправьте его на /movies
-            if (routesRedirectLogined.includes(location.pathname)) {
-                navigate('/movies');
-            }
-            // Дополнительно, если пользователь не залогинен, вы можете перенаправить его на страницу авторизации, если он пытается зайти на /profile или /saved-movies
-            if (!currentUser.isLoggedIn && ['/profile', '/saved-movies'].includes(location.pathname)) {
-                navigate('/signin');
-            }
-
+            routesRedirectLogined.includes(location.pathname) && navigate('/movies');
             getMovies();
             getSavedMovies();
         }

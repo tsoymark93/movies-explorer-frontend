@@ -24,17 +24,21 @@ const HeaderNav = ({ isMain }) => {
             <div className={`navigation__container${classNavigationContainerMenu}`}>
                 <button className={`navigation__button ${classBurgerMenu}`} onClick={onButtonBurgerClick}></button>
                 <nav className={`navigation__links ${classNavigationLinksMenu}`}>
-                    <NavLink to="/" className={`${classLink} navigation__link_type_home`}>
+                    <NavLink to="/" className={`${classLink} navigation__link_type_home`} onClick={onButtonBurgerClick}>
                         Главная
                     </NavLink>
-                    <NavLink to="/movies" className={classLink}>
+                    <NavLink to="/movies" className={classLink} onClick={onButtonBurgerClick}>
                         Фильмы
                     </NavLink>
-                    <NavLink to="/saved-movies" className={classLink}>
+                    <NavLink to="/saved-movies" className={classLink} onClick={onButtonBurgerClick}>
                         Сохранённые фильмы
                     </NavLink>
                 </nav>
-                <NavLink className={`link navigation__profile${classNavigationProfileMenu}`} to="/profile">
+                <NavLink
+                    className={`link navigation__profile${classNavigationProfileMenu}`}
+                    to="/profile"
+                    onClick={onButtonBurgerClick}
+                >
                     Аккаунт
                 </NavLink>
             </div>
