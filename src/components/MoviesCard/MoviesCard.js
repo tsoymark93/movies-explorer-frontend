@@ -4,9 +4,11 @@ import { BASE_IMAGE_URL } from '../../utils/constants';
 import { convertToHoursMinutes } from '../../utils/utils';
 import { useLocation } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import ModalTrailer from '../ModalTrailer/ModalTrailer';
 
 const MoviesCard = ({ movie, savedMovies, pinMovie, unpinMovie, mode }) => {
     const [liked, setLiked] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const location = useLocation();
     const currentUser = useContext(CurrentUserContext);
 
@@ -28,6 +30,14 @@ const MoviesCard = ({ movie, savedMovies, pinMovie, unpinMovie, mode }) => {
         setLiked((state) => !state);
     };
 
+    const handleOpenModal = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
     const name = movie.nameRU;
     const duration = convertToHoursMinutes(movie.duration);
     const urlImage = location.pathname === '/movies' ? `${BASE_IMAGE_URL}${movie.image.url}` : movie.image;
@@ -43,11 +53,12 @@ const MoviesCard = ({ movie, savedMovies, pinMovie, unpinMovie, mode }) => {
                         mode === 'liked' ? 'movies__card-button_type_liked' : ''
                     }`}
                     onClick={handleButton}
-                ></button>
+                />
             </div>
-            <a href={trailerLink} className="link movies__card-trailerLink" target="_blank" rel="noreferrer">
+            <button className="link movies__card-trailerLink" onClick={handleOpenModal}>
                 <img className="movies__card-image" src={urlImage} alt="Фото" />
-            </a>{' '}
+            </button>
+            {showModal && <ModalTrailer onClose={handleCloseModal} trailerLink={trailerLink} />}
         </li>
     );
 };

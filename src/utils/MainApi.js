@@ -38,7 +38,7 @@ class Api {
     getUser(token) {
         return fetch(`${this._baseUrl}/users/me`, {
             headers: {
-                authorization: `Bearer ${token && localStorage.getItem('token')}`,
+                authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         }).then(this._checkResponse);

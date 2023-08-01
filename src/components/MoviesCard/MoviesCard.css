@@ -28,6 +28,11 @@
     font-style: normal;
     color: #8B8B8B
 }
+
+.movies__card-trailerLink {
+    background-color: #222222;
+    border: none;
+}
   
 .movies__card-button {
     position: relative;
@@ -64,7 +69,6 @@
 
 @media screen and (min-width: 768px) {
     .movies__card-image {
-        width: 339px;
         object-fit: contain;
         height: 190px;
         justify-self: center;
@@ -73,7 +77,6 @@
 
 @media screen and (min-width: 1280px) {
     .movies__card-image {
-        width: 364px;
         object-fit: contain;
         height: 203px
     }
