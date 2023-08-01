@@ -7,7 +7,6 @@
     justify-content: center;
     column-gap: 13px;
     align-items: center;
-    cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {

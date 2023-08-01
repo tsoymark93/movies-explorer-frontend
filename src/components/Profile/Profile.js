@@ -22,6 +22,11 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
     const [isUsernameValid, setIsUsernameValid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true);
 
+    useEffect(() => {
+        setUsername(currentUser.name || '');
+        setEmail(currentUser.email || '');
+    }, [currentUser]);
+
     const validateForm = () => {
         const errors = [];
 

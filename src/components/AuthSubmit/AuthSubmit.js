@@ -35,7 +35,7 @@ const AuthSubmit = ({
             <span className="auth__submit-error">{textInfoSubmit}</span>{' '}
             <button
                 className={`${classButton} ${disabled ? 'disabled' : ''}`}
-                type="button"
+                type="submit"
                 onClick={onClick}
                 disabled={disabled} // Используем атрибут disabled на самой кнопке
             >

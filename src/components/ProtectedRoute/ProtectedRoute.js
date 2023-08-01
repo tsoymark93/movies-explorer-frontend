@@ -1,8 +1,10 @@
+// ProtectedRoute.js
+
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-function ProtectedRoute({ component: Component, ...props }) {
-    return props.loggedIn ? <Component {...props} /> : <Navigate to="/" />;
+function ProtectedRoute({ element: Element, isLoggedIn, ...rest }) {
+    return isLoggedIn ? <Element {...rest} /> : <Navigate to="/profile" />;
 }
 
 export default ProtectedRoute;

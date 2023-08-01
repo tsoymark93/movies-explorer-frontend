@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import useInput from '../../utils/useInput';
 import { useLocation } from 'react-router-dom';
 
 const SearchForm = ({ onSubmit, onInputSearchError, initialName = '', isChecked, handleInputChecked }) => {
-    const searchInput = useInput({ inputValue: initialName });
+    const searchInput = useInput({});
     const location = useLocation();
+
+    useEffect(() => {
+        searchInput.setValue(initialName);
+    }, []);
+
     const handleSubmit = (evt) => {
         evt.preventDefault();
         if (location.pathname == '/movies') localStorage.setItem('name', searchInput.value);

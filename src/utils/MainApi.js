@@ -12,6 +12,7 @@ class Api {
 
         return Promise.reject(res.json());
     }
+
     register = ({ name, email, password }) => {
         return fetch(`${BASE_MAIN_URL}/signup`, {
             method: 'POST',

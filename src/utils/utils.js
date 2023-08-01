@@ -1,10 +1,12 @@
 const checkTextIncludes = (str, substr) => str.toLowerCase().includes(substr.toLowerCase());
 
 const filterMovies = (dataMovies, name) => {
+    if (name === '') {
+        return dataMovies;
+    }
     const movies = dataMovies.filter(
         (movie) => checkTextIncludes(movie.nameRU, name) || checkTextIncludes(movie.nameRU, name),
     );
-
     return movies;
 };
 

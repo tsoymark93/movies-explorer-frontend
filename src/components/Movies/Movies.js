@@ -3,45 +3,35 @@ import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import ButtonMore from '../ButtonMore/ButtonMore';
-import { moviesApi } from '../../utils/MoviesApi';
-import { filterMovies } from '../../utils/utils';
 import RenderMovies from '../RenderMovies/RenderMovies';
 import useMoviesDiplay from '../../utils/useMoviesDisplay';
 import Preloader from '../Preloader/Preloader';
+import { filterMovies } from '../../utils/utils';
 
-const Movies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
-    const [isLoader, setIsLoader] = useState(false);
+const Movies = ({ movies, savedMovies, pinMovie, unpinMovie, isLoader, onInputSearchError }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const [movies, setMovies] = useState([]);
-    const moviesDisplay = useMoviesDiplay({ movies, isChecked });
-
+    const [initialName, setInitialName] = useState('');
+    const [foundMovies, setFoundMovies] = useState([]);
+    const moviesDisplay = useMoviesDiplay({ movies, isChecked, initialName });
     const initialCheckbox = () => {
-        return (localStorage.getItem('checkbox') || '') === 'true' ? true : false;
+        return (localStorage.getItem('checkbox') || '') === 'true';
     };
     const initialNameValue = () => {
         return localStorage.getItem('name') || '';
     };
 
-    const getMovies = (name = '') => {
-        setIsLoader(true);
-        moviesApi
-            .getMovies()
-            .then((dataMovies) => {
-                setMovies([...filterMovies(dataMovies, name)]);
-            })
-            .catch(() => errorGetMoviesPopupOpen())
-            .finally(() => {
-                setIsLoader(false);
-            });
-    };
-
     const handleSearchSubmit = (name) => {
-        getMovies(name);
+        localStorage.setItem('name', name);
+        setInitialName(name);
     };
 
     useEffect(() => {
+        setFoundMovies(filterMovies(movies, initialName));
+    }, [movies, initialName]);
+
+    useEffect(() => {
         setIsChecked(initialCheckbox());
-        getMovies(initialNameValue());
+        setInitialName(initialNameValue());
     }, []);
 
     const handleInputChecked = (evt) => {
@@ -56,15 +46,18 @@ const Movies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
                 onInputSearchError={onInputSearchError}
                 handleInputChecked={handleInputChecked}
                 isChecked={isChecked}
-                initialName={initialNameValue()}
+                initialName={initialNameValue}
             ></SearchForm>
             {isLoader ? <Preloader /> : ''}
             <MoviesCardList>
                 <RenderMovies
-                    movies={movies}
+                    movies={foundMovies}
                     isLoader={isLoader}
                     isChecked={isChecked}
                     countMovies={moviesDisplay.countMovies}
+                    savedMovies={savedMovies}
+                    pinMovie={pinMovie}
+                    unpinMovie={unpinMovie}
                 />
             </MoviesCardList>
             {moviesDisplay.isButtonMoreEnabled ? <ButtonMore onClick={moviesDisplay.handleButtonMore} /> : ''}

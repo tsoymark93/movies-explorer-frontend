@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { filterShortMovies } from './utils';
+import { filterShortMovies, filterMovies } from './utils';
 
-const useMoviesDiplay = ({ movies, isChecked }) => {
+const useMoviesDisplay = ({ movies, isChecked, initialName }) => {
     const [windowSize, setWindowsSize] = useState(window.screen.width);
     const [countMovies, setCountMovies] = useState(0);
     const [isButtonMoreEnabled, setIsButtonMoreEnabled] = useState(false);
@@ -28,9 +28,10 @@ const useMoviesDiplay = ({ movies, isChecked }) => {
     }, [windowSize, movies]);
 
     useEffect(() => {
-        const filterMovies = filterShortMovies(movies, isChecked);
-        filterMovies.length > countMovies ? setIsButtonMoreEnabled(true) : setIsButtonMoreEnabled(false);
-    }, [countMovies, movies, isChecked]);
+        const foundMovies = filterMovies(movies, initialName);
+        const filterIsCheckedMovies = filterShortMovies(foundMovies, isChecked);
+        filterIsCheckedMovies.length > countMovies ? setIsButtonMoreEnabled(true) : setIsButtonMoreEnabled(false);
+    }, [countMovies, movies, isChecked, initialName]);
 
     const handleButtonMore = () => {
         if (windowSize >= 1280) {
@@ -45,4 +46,4 @@ const useMoviesDiplay = ({ movies, isChecked }) => {
     return { countMovies, isButtonMoreEnabled, handleButtonMore };
 };
 
-export default useMoviesDiplay;
+export default useMoviesDisplay;

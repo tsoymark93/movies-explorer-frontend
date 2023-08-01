@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './Login.css';
 import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
@@ -11,8 +11,14 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
 
     const [email, setEmail] = useState(currentUser.email || '');
     const [password, setPassword] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState(true);
-    const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    useEffect(() => {
+        // Check form validity whenever any input changes
+        const isEmailValid = validateEmail(email) === '';
+        const isPasswordValid = validatePassword(password) === '';
+        setIsFormValid(isEmailValid && isPasswordValid);
+    }, [email, password]);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
@@ -25,16 +31,11 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
 
     const handleEmailChange = (newValue) => {
         setEmail(newValue);
-        setIsEmailValid(validateEmail(newValue) === '');
     };
 
     const handlePasswordChange = (newValue) => {
         setPassword(newValue);
-        setIsPasswordValid(validatePassword(newValue) === '');
     };
-
-    // Проверяем общую валидность формы
-    const isValid = isEmailValid && isPasswordValid;
 
     return (
         <main className="auth">
@@ -47,7 +48,7 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
                         type="email"
                         value={email}
                         onChange={handleEmailChange}
-                        isValid={isEmailValid}
+                        isValid={validateEmail(email) === ''}
                     />
                     <span className="auth__input-error">{validateEmail(email)}</span>
                     <AuthInput
@@ -56,7 +57,7 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
                         type="password"
                         value={password}
                         onChange={handlePasswordChange}
-                        isValid={isPasswordValid}
+                        isValid={validatePassword(password) === ''}
                     />
                     <span className="auth__input-error">{validatePassword(password)}</span>
                 </div>
@@ -66,7 +67,7 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
                     textLink="Регистрация"
                     textInfoSubmit={errorSubmitApi}
                     urlLinkSubmit="/signup"
-                    disabled={!isValid} // Используем isValid для задания состояния disabled кнопки
+                    disabled={!isFormValid}
                 />
             </form>
         </main>

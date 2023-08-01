@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './Register.css';
 import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
@@ -12,9 +12,14 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
     const [name, setName] = useState(currentUser.name || '');
     const [email, setEmail] = useState(currentUser.email || '');
     const [password, setPassword] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState(true);
-    const [isPasswordValid, setIsPasswordValid] = useState(true);
-    const [isNameValid, setIsNameValid] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    useEffect(() => {
+        const isEmailValid = validateEmail(email) === '';
+        const isPasswordValid = validatePassword(password) === '';
+        const isNameValid = validateName(name) === '';
+        setIsFormValid(isEmailValid && isPasswordValid && isNameValid);
+    }, [email, password, name]);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
@@ -28,21 +33,15 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
 
     const handleEmailChange = (newValue) => {
         setEmail(newValue);
-        setIsEmailValid(validateEmail(newValue) === '');
     };
 
     const handlePasswordChange = (newValue) => {
         setPassword(newValue);
-        setIsPasswordValid(validatePassword(newValue) === '');
     };
 
     const handleNameChange = (newValue) => {
         setName(newValue);
-        setIsNameValid(validateName(newValue) === '');
     };
-
-    // Проверяем общую валидность формы
-    const isValid = isEmailValid && isPasswordValid && isNameValid;
 
     return (
         <form className="auth__form" onSubmit={handleSubmit} noValidate>
@@ -54,7 +53,7 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
                     type="text"
                     value={name}
                     onChange={handleNameChange}
-                    isValid={isNameValid}
+                    isValid={validateName(name) === ''}
                 />
                 <span className="auth__input-error">{validateName(name)}</span>
                 <AuthInput
@@ -63,7 +62,7 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
                     type="email"
                     value={email}
                     onChange={handleEmailChange}
-                    isValid={isEmailValid}
+                    isValid={validateEmail(email) === ''}
                 />
                 <span className="auth__input-error">{validateEmail(email)}</span>
                 <AuthInput
@@ -72,7 +71,7 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
                     type="password"
                     value={password}
                     onChange={handlePasswordChange}
-                    isValid={isPasswordValid}
+                    isValid={validatePassword(password) === ''}
                 />
                 <span className="auth__input-error">{validatePassword(password)}</span>
             </div>
@@ -82,7 +81,7 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
                 textLink="Войти"
                 textInfoSubmit={errorSubmitApi}
                 urlLinkSubmit="/signin"
-                disabled={!isValid} // Используем isValid для задания состояния disabled кнопки
+                disabled={!isFormValid}
             />
         </form>
     );

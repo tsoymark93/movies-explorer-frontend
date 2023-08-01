@@ -1,43 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SavedMovies.css';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
-import { moviesApi } from '../../utils/MoviesApi';
-import { filterMovies } from '../../utils/utils';
 import RenderMovies from '../RenderMovies/RenderMovies';
 import Preloader from '../Preloader/Preloader';
+import { filterMovies } from '../../utils/utils';
 
-const SavedMovies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
+const SavedMovies = ({ movies, isLoader, unpinMovie, onInputSearchError }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const [isLoader, setIsLoader] = useState(false);
-    const [movies, setMovies] = useState([]);
+    const [foundMovies, setFoundMovies] = useState([]);
 
-    const getMovies = (name = '') => {
-        setIsLoader(true);
-        moviesApi
-            .getMovies()
-            .then((dataMovies) => {
-                setMovies([...filterMovies(dataMovies, name)]);
-            })
-            .catch(() => errorGetMoviesPopupOpen())
-            .finally(() => {
-                setIsLoader(false);
-            });
-    };
     const handleSearchSubmit = (name) => {
-        getMovies(name);
+        setFoundMovies(filterMovies(movies, name));
     };
-
-    useEffect(() => {
-        getMovies();
-    }, []);
 
     const handleInputChecked = (evt) => {
         setIsChecked(evt.target.checked);
     };
 
+    useEffect(() => {
+        setFoundMovies(movies);
+    }, [movies]);
+
     return (
-        <main className="movies">
+        <main className="movies movies_type_saved">
+            {' '}
             <SearchForm
                 onSubmit={handleSearchSubmit}
                 isChecked={isChecked}
@@ -46,7 +33,7 @@ const SavedMovies = ({ onInputSearchError, errorGetMoviesPopupOpen }) => {
             />
             {isLoader ? <Preloader /> : ''}
             <MoviesCardList>
-                <RenderMovies movies={movies} isLoader={isLoader} isChecked={isChecked} />
+                <RenderMovies movies={foundMovies} isLoader={isLoader} isChecked={isChecked} unpinMovie={unpinMovie} />
             </MoviesCardList>
         </main>
     );

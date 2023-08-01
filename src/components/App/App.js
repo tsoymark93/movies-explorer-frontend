@@ -15,23 +15,39 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { mainApi } from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { moviesApi } from '../../utils/MoviesApi';
+import { filterMovies } from '../../utils/utils';
 
 function App() {
     const location = useLocation();
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState({
         name: '',
-        isLoggedIn: true,
+        isLoggedIn: false,
         email: '',
         _id: '',
     });
     const [isLoader, setIsLoader] = useState(false);
+    const [isProfileLoader, setIsProfileLoader] = useState(false);
+    const [isLoginLoader, setIsLoginLoader] = useState(false);
+    const [isRegisterLoader, setIsRegisterLoader] = useState(false);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [errorSubmitApi, setErrorSubmitApi] = useState('');
     const [isFooterDisabled, setIsFooterDisabled] = useState(false);
     const routesFootersDisabled = ['/signin', '/signup', '/profile', '/404'];
     const [isHeaderDisabled, setIsHeaderDisabled] = useState(false);
     const routesHeaderDisabled = ['/404'];
+    const [movies, setMovies] = useState([]);
+    const [savedMovies, setSavedMovies] = useState([]);
+    const routesRedirectLogined = ['/signin', '/signup'];
+
+    useEffect(() => {
+        if (isTokenChecked && currentUser.isLoggedIn) {
+            routesRedirectLogined.includes(location.pathname) && navigate('/movies');
+            getMovies();
+            getSavedMovies();
+        }
+    }, [isTokenChecked, currentUser.isLoggedIn]);
 
     const checkToken = async (token) => {
         mainApi
@@ -45,7 +61,10 @@ function App() {
                     });
                 }
             })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                onSignOut();
+                console.log(err);
+            })
             .finally(() => setIsTokenChecked(true));
     };
 
@@ -74,7 +93,7 @@ function App() {
     };
 
     const onUpdateUser = ({ email, name }) => {
-        setIsLoader(true);
+        setIsProfileLoader(true);
         return mainApi
             .updateUser({ email, name })
             .then((data) => {
@@ -95,12 +114,12 @@ function App() {
                 });
             })
             .finally(() => {
-                setIsLoader(false);
+                setIsProfileLoader(false);
             });
     };
 
     const onLogin = ({ email, password }) => {
-        setIsLoader(true);
+        setIsLoginLoader(true);
         return mainApi
             .authorize({ email, password })
             .then((data) => {
@@ -115,12 +134,12 @@ function App() {
                 });
             })
             .finally(() => {
-                setIsLoader(false);
+                setIsLoginLoader(false);
             });
     };
 
     const onRegister = ({ name, email, password }) => {
-        setIsLoader(true);
+        setIsRegisterLoader(true);
         return mainApi
             .register({ name, email, password })
             .then(() => {
@@ -136,7 +155,7 @@ function App() {
                 });
             })
             .finally(() => {
-                setIsLoader(false);
+                setIsRegisterLoader(false);
             });
     };
 
@@ -150,6 +169,52 @@ function App() {
         navigate('/');
     };
 
+    const getSavedMovies = (name = '') => {
+        return mainApi
+            .getMovies()
+            .then((data) => {
+                setSavedMovies([...filterMovies(data, name)]);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    };
+
+    const getMovies = (name = '') => {
+        setIsLoader(true);
+        moviesApi
+            .getMovies()
+            .then((dataMovies) => {
+                setMovies([...filterMovies(dataMovies, name)]);
+            })
+            .catch(() => errorGetMoviesPopupOpen())
+            .finally(() => {
+                setIsLoader(false);
+            });
+    };
+
+    const createMovie = (movie) => {
+        return mainApi
+            .createMovie({ ...movie })
+            .then(() => getSavedMovies())
+            .catch((res) => {
+                res.then((err) => {
+                    console.log(err.message);
+                });
+            });
+    };
+
+    const removeMovie = (movie) => {
+        return mainApi
+            .removeMovie(movie)
+            .then(() => getSavedMovies())
+            .catch((res) => {
+                res.then((err) => {
+                    console.log(err.message);
+                });
+            });
+    };
+
     const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
     const [infoTooltipProps, setInfoTooltipProps] = useState({
         message: '',
@@ -161,7 +226,6 @@ function App() {
         setIsInfoTooltipOpen(true);
     };
     const closePopup = () => {
-        setCurrentUser({ name: 'user' });
         setIsInfoTooltipOpen(false);
     };
     const onInputSearchError = () => {
@@ -206,46 +270,56 @@ function App() {
                     <Route
                         path="/movies"
                         element={
-                            <ProtectedRoute>
-                                <Movies
-                                    onInputSearchError={onInputSearchError}
-                                    errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
-                                    isTokenChecked={isTokenChecked}
-                                />
-                            </ProtectedRoute>
+                            <ProtectedRoute
+                                isLoggedIn={currentUser.isLoggedIn}
+                                element={Movies}
+                                onInputSearchError={onInputSearchError}
+                                errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
+                                isTokenChecked={isTokenChecked}
+                                movies={movies}
+                                savedMovies={savedMovies}
+                                getMovies={getMovies}
+                                pinMovie={createMovie}
+                                unpinMovie={removeMovie}
+                                isLoader={isLoader}
+                            />
                         }
                     />
                     <Route
                         path="/saved-movies"
                         element={
-                            <ProtectedRoute>
-                                <SavedMovies
-                                    onInputSearchError={onInputSearchError}
-                                    errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
-                                    isTokenChecked={isTokenChecked}
-                                />
-                            </ProtectedRoute>
+                            <ProtectedRoute
+                                isLoggedIn={currentUser.isLoggedIn}
+                                element={SavedMovies}
+                                onInputSearchError={onInputSearchError}
+                                errorGetMoviesPopupOpen={errorGetMoviesPopupOpen}
+                                isTokenChecked={isTokenChecked}
+                                movies={savedMovies}
+                                unpinMovie={removeMovie}
+                                isLoader={isLoader}
+                            />
                         }
                     />
                     <Route
                         path="/profile"
                         element={
-                            <ProtectedRoute isProfile={true}>
-                                <Profile
-                                    isLoader={isLoader}
-                                    onSignOut={onSignOut}
-                                    onUpdateUser={onUpdateUser}
-                                    errorSubmitApi={errorSubmitApi}
-                                    isTokenChecked={isTokenChecked}
-                                />
-                            </ProtectedRoute>
+                            <ProtectedRoute
+                                // isProfile={true}
+                                isLoggedIn={currentUser.isLoggedIn}
+                                element={Profile}
+                                isLoader={isProfileLoader}
+                                onSignOut={onSignOut}
+                                onUpdateUser={onUpdateUser}
+                                errorSubmitApi={errorSubmitApi}
+                                isTokenChecked={isTokenChecked}
+                            />
                         }
                     />
                     <Route
                         path="/signin"
                         element={
                             <Auth>
-                                <Login isLoader={isLoader} onLogin={onLogin} errorSubmitApi={errorSubmitApi} />
+                                <Login isLoader={isLoginLoader} onLogin={onLogin} errorSubmitApi={errorSubmitApi} />
                             </Auth>
                         }
                     />
@@ -253,7 +327,11 @@ function App() {
                         path="/signup"
                         element={
                             <Auth>
-                                <Register isLoader={isLoader} onRegister={onRegister} errorSubmitApi={errorSubmitApi} />
+                                <Register
+                                    isLoader={isRegisterLoader}
+                                    onRegister={onRegister}
+                                    errorSubmitApi={errorSubmitApi}
+                                />
                             </Auth>
                         }
                     />

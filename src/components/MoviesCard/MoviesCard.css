@@ -52,7 +52,7 @@
     background-position: center;
 }
 
-.movies__card-button_type_liked {
+.movies__card-button_liked::after{
     background-size: 12px;
     background-image: url('../../images/CLOSE.svg');
 }
