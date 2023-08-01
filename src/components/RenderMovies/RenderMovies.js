@@ -10,6 +10,7 @@ const RenderMovies = ({
     pinMovie,
     unpinMovie,
     countMovies = movies.length,
+    mode,
 }) => {
     const notFoundMovies = <h2 className="movies__card-list-title">Ничего не найдено</h2>;
     const renderMovies = filterShortMovies(movies, isChecked)
@@ -22,6 +23,7 @@ const RenderMovies = ({
                     pinMovie={pinMovie}
                     unpinMovie={unpinMovie}
                     key={movie.id || movie._id}
+                    mode={mode}
                 />
             );
         });

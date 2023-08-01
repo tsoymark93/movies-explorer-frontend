@@ -33,7 +33,13 @@ const SavedMovies = ({ movies, isLoader, unpinMovie, onInputSearchError }) => {
             />
             {isLoader ? <Preloader /> : ''}
             <MoviesCardList>
-                <RenderMovies movies={foundMovies} isLoader={isLoader} isChecked={isChecked} unpinMovie={unpinMovie} />
+                <RenderMovies
+                    movies={foundMovies}
+                    isLoader={isLoader}
+                    isChecked={isChecked}
+                    unpinMovie={unpinMovie}
+                    mode="liked"
+                />
             </MoviesCardList>
         </main>
     );

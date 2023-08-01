@@ -50,7 +50,7 @@ const MoviesCard = ({ movie, savedMovies, pinMovie, unpinMovie, mode }) => {
                 <p className="movies__card-duration">{duration}</p>
                 <button
                     className={`movies__card-button ${liked ? 'movies__card-button_liked' : ''} ${
-                        mode === 'liked' ? 'movies__card-button_type_liked' : ''
+                        mode === 'liked' ? 'movies__card-button_pined' : ''
                     }`}
                     onClick={handleButton}
                 />
