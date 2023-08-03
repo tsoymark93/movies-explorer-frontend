@@ -3,7 +3,7 @@ import './MoviesCard.css';
 import { BASE_IMAGE_URL } from '../../utils/constants';
 import { convertToHoursMinutes } from '../../utils/utils';
 import { useLocation } from 'react-router-dom';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ModalTrailer from '../ModalTrailer/ModalTrailer';
 
 const MoviesCard = ({ movie, savedMovies, pinMovie, unpinMovie, mode }) => {

@@ -4,7 +4,7 @@ import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
 import AuthInput from '../AuthInput/AuthInput';
 import { validateName, validateEmail, validatePassword } from '../../utils/validation';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
     const currentUser = useContext(CurrentUserContext);
@@ -25,14 +25,14 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
     const handleSubmit = (evt) => {
         evt.preventDefault();
 
-        setIsLoading(true); // Устанавливаем состояние загрузки в true при начале запроса
+        setIsLoading(true);
 
         onRegister({
             name: name,
             email: email,
             password: password,
         }).finally(() => {
-            setIsLoading(false); // Возвращаем состояние загрузки обратно в false, когда запрос завершается (успех или ошибка)
+            setIsLoading(false);
         });
     };
 

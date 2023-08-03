@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { filterShortMovies, filterMovies } from './utils';
+import { filterShortMovies, filterMovies } from '../utils';
 
 const useMoviesDisplay = ({ movies, isChecked, initialName }) => {
     const [windowSize, setWindowsSize] = useState(window.innerWidth);

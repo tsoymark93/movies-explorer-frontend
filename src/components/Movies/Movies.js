@@ -4,7 +4,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import ButtonMore from '../ButtonMore/ButtonMore';
 import RenderMovies from '../RenderMovies/RenderMovies';
-import useMoviesDisplay from '../../utils/useMoviesDisplay';
+import useMoviesDisplay from '../../utils/hooks/useMoviesDisplay';
 import Preloader from '../Preloader/Preloader';
 import { filterMovies } from '../../utils/utils';
 

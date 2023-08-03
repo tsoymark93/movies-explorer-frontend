@@ -4,7 +4,7 @@ import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
 import AuthInput from '../AuthInput/AuthInput';
 import { validateEmail, validatePassword } from '../../utils/validation';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
     const currentUser = useContext(CurrentUserContext);
@@ -15,22 +15,21 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        // Check form validity whenever any input changes
         const isEmailValid = validateEmail(email) === '';
         const isPasswordValid = validatePassword(password) === '';
-        setIsFormValid(isEmailValid && isPasswordValid && !isLoading); // Отключаем проверку формы во время отправки запроса API
+        setIsFormValid(isEmailValid && isPasswordValid && !isLoading);
     }, [email, password, isLoading]);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
 
-        setIsLoading(true); // Устанавливаем состояние загрузки в true при начале запроса
+        setIsLoading(true);
 
         onLogin({
             email: email,
             password: password,
         }).finally(() => {
-            setIsLoading(false); // Возвращаем состояние загрузки обратно в false, когда запрос завершается (успех или ошибка)
+            setIsLoading(false);
         });
     };
 

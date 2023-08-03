@@ -4,7 +4,7 @@ import '../Auth/Auth.css';
 import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthInput from '../AuthInput/AuthInput';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const Profile = ({ onSignOut, onUpdateUser, errorSubmitApi, clearErrorSubmitApi }) => {
     const currentUser = useContext(CurrentUserContext);
@@ -19,7 +19,7 @@ const Profile = ({ onSignOut, onUpdateUser, errorSubmitApi, clearErrorSubmitApi 
     const [isSaveButtonActive, setIsSaveButtonActive] = useState(false);
 
     useEffect(() => {
-        setIsSaveButtonActive(!errorSubmitApi); // Изначально разрешите кнопку, если ошибки нет
+        setIsSaveButtonActive(!errorSubmitApi);
     }, [errorSubmitApi]);
 
     const [isUsernameValid, setIsUsernameValid] = useState(true);

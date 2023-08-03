@@ -13,7 +13,6 @@ const AuthSubmit = ({
     disabled,
     textInfoSubmit,
     onSignOut,
-    // isSaveButtonActive,
 }) => {
     const classContainer = `auth__submit-container${isProfile ? ' auth__submit-container_type_profile' : ''}`;
     const classButton = `link auth__button-submit${isProfile ? ' auth__button-submit_type_profile' : ''} ${

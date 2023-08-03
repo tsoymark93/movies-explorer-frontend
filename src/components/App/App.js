@@ -12,7 +12,7 @@ import Register from '../Register/Register';
 import NotFound from '../NotFound/NotFound';
 import './App.css';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { mainApi } from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { moviesApi } from '../../utils/MoviesApi';
