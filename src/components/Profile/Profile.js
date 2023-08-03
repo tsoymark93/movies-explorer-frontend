@@ -6,7 +6,7 @@ import AuthInput from '../AuthInput/AuthInput';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-const Profile = ({ onSignOut, onUpdateUser }) => {
+const Profile = ({ onSignOut, onUpdateUser, errorSubmitApi, clearErrorSubmitApi }) => {
     const currentUser = useContext(CurrentUserContext);
 
     const [initialUsername, setInitialUsername] = useState(currentUser.name || '');
@@ -17,6 +17,10 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
     const [errorMessages, setErrorMessages] = useState([]);
     const saveButtonStyleClass = 'auth__button-submit_type_profile-save';
     const [isSaveButtonActive, setIsSaveButtonActive] = useState(false);
+
+    useEffect(() => {
+        setIsSaveButtonActive(!errorSubmitApi); // Изначально разрешите кнопку, если ошибки нет
+    }, [errorSubmitApi]);
 
     const [isUsernameValid, setIsUsernameValid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true);
@@ -41,7 +45,7 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
         const trimmedEmail = email.trim();
 
         const nameRegex = /^[A-Za-zА-Яа-яЁё\s-]+$/;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         if (isEditMode) {
             if (trimmedUsername === '') {
@@ -91,6 +95,8 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
             onUpdateUser({
                 email: email,
                 name: username,
+            }).then(() => {
+                clearErrorSubmitApi();
             });
             setInitialUsername(username);
             setInitialEmail(email);
@@ -153,6 +159,7 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
                         onClick={handleSaveProfile}
                         customStyleClass={saveButtonStyleClass}
                         disabled={!isSaveButtonActive}
+                        textInfoSubmit={errorSubmitApi}
                     />
                 ) : (
                     <AuthSubmit
@@ -163,6 +170,7 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
                         urlLinkSubmit="/logout"
                         onClick={toggleEditing}
                         onSignOut={onSignOut}
+                        textInfoSubmit={errorSubmitApi}
                     />
                 )}
             </form>

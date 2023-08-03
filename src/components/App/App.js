@@ -261,6 +261,10 @@ function App() {
         }
     }, [location.pathname]);
 
+    const clearErrorSubmitApi = () => {
+        setErrorSubmitApi('');
+    };
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="App">
@@ -311,6 +315,7 @@ function App() {
                                 onUpdateUser={onUpdateUser}
                                 errorSubmitApi={errorSubmitApi}
                                 isTokenChecked={isTokenChecked}
+                                clearErrorSubmitApi={clearErrorSubmitApi}
                             />
                         }
                     />
