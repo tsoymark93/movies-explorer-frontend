@@ -10,7 +10,7 @@ const SearchForm = ({ onSubmit, onInputSearchError, initialName = '', isChecked,
 
     useEffect(() => {
         searchInput.setValue(initialName);
-    }, []);
+    }, [initialName]);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
@@ -27,6 +27,7 @@ const SearchForm = ({ onSubmit, onInputSearchError, initialName = '', isChecked,
                     onChange={searchInput.onChange}
                     defaultValue={initialName}
                     required
+                    value={searchInput.value}
                 />
                 <button className="link search-form__button" type="submit" />
             </div>

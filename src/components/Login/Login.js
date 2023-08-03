@@ -12,20 +12,25 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
     const [email, setEmail] = useState(currentUser.email || '');
     const [password, setPassword] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Check form validity whenever any input changes
         const isEmailValid = validateEmail(email) === '';
         const isPasswordValid = validatePassword(password) === '';
-        setIsFormValid(isEmailValid && isPasswordValid);
-    }, [email, password]);
+        setIsFormValid(isEmailValid && isPasswordValid && !isLoading); // Отключаем проверку формы во время отправки запроса API
+    }, [email, password, isLoading]);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
 
+        setIsLoading(true); // Устанавливаем состояние загрузки в true при начале запроса
+
         onLogin({
             email: email,
             password: password,
+        }).finally(() => {
+            setIsLoading(false); // Возвращаем состояние загрузки обратно в false, когда запрос завершается (успех или ошибка)
         });
     };
 
@@ -49,6 +54,7 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
                         value={email}
                         onChange={handleEmailChange}
                         isValid={validateEmail(email) === ''}
+                        disabled={isLoading}
                     />
                     <span className="auth__input-error">{validateEmail(email)}</span>
                     <AuthInput
@@ -58,6 +64,7 @@ const Login = ({ isLoader, onLogin, errorSubmitApi }) => {
                         value={password}
                         onChange={handlePasswordChange}
                         isValid={validatePassword(password) === ''}
+                        disabled={isLoading}
                     />
                     <span className="auth__input-error">{validatePassword(password)}</span>
                 </div>

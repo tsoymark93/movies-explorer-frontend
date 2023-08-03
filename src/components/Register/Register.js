@@ -13,21 +13,26 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
     const [email, setEmail] = useState(currentUser.email || '');
     const [password, setPassword] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const isEmailValid = validateEmail(email) === '';
         const isPasswordValid = validatePassword(password) === '';
         const isNameValid = validateName(name) === '';
-        setIsFormValid(isEmailValid && isPasswordValid && isNameValid);
-    }, [email, password, name]);
+        setIsFormValid(isEmailValid && isPasswordValid && isNameValid && !isLoader);
+    }, [email, password, name, isLoading]);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
+
+        setIsLoading(true); // Устанавливаем состояние загрузки в true при начале запроса
 
         onRegister({
             name: name,
             email: email,
             password: password,
+        }).finally(() => {
+            setIsLoading(false); // Возвращаем состояние загрузки обратно в false, когда запрос завершается (успех или ошибка)
         });
     };
 
@@ -54,6 +59,7 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
                     value={name}
                     onChange={handleNameChange}
                     isValid={validateName(name) === ''}
+                    disabled={isLoading}
                 />
                 <span className="auth__input-error">{validateName(name)}</span>
                 <AuthInput
@@ -63,6 +69,7 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
                     value={email}
                     onChange={handleEmailChange}
                     isValid={validateEmail(email) === ''}
+                    disabled={isLoading}
                 />
                 <span className="auth__input-error">{validateEmail(email)}</span>
                 <AuthInput
@@ -72,6 +79,7 @@ const Register = ({ isLoader, onRegister, errorSubmitApi }) => {
                     value={password}
                     onChange={handlePasswordChange}
                     isValid={validatePassword(password) === ''}
+                    disabled={isLoading}
                 />
                 <span className="auth__input-error">{validatePassword(password)}</span>
             </div>
