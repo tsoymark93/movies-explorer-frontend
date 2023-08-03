@@ -7,25 +7,32 @@ import AuthSubmit from '../AuthSubmit/AuthSubmit';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 const Profile = ({ onSignOut, onUpdateUser }) => {
-    // Используем хук useContext для получения значения из контекста
     const currentUser = useContext(CurrentUserContext);
 
-    // Инициализируем состояния с данными пользователя из контекста
-    const [username, setUsername] = useState(currentUser.name);
-    const [email, setEmail] = useState(currentUser.email);
+    const [initialUsername, setInitialUsername] = useState(currentUser.name || '');
+    const [initialEmail, setInitialEmail] = useState(currentUser.email || '');
+    const [username, setUsername] = useState(initialUsername);
+    const [email, setEmail] = useState(initialEmail);
     const [isEditMode, setIsEditMode] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
     const saveButtonStyleClass = 'auth__button-submit_type_profile-save';
     const [isSaveButtonActive, setIsSaveButtonActive] = useState(false);
 
-    // Состояния валидации для каждого инпута
     const [isUsernameValid, setIsUsernameValid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true);
 
     useEffect(() => {
         setUsername(currentUser.name || '');
         setEmail(currentUser.email || '');
+        setInitialUsername(currentUser.name || '');
+        setInitialEmail(currentUser.email || '');
     }, [currentUser]);
+
+    useEffect(() => {
+        const isUsernameChanged = username !== initialUsername;
+        const isEmailChanged = email !== initialEmail;
+        setIsSaveButtonActive(isEditMode && (isUsernameChanged || isEmailChanged));
+    }, [username, email, initialUsername, initialEmail, isEditMode]);
 
     const validateForm = () => {
         const errors = [];
@@ -52,14 +59,11 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
             }
         }
 
-        // Устанавливаем состояния валидации
         setIsUsernameValid(nameRegex.test(trimmedUsername) && trimmedUsername.length >= 2);
         setIsEmailValid(emailRegex.test(trimmedEmail));
 
-        // Устанавливаем состояние активности кнопки в зависимости от наличия ошибок
         setIsSaveButtonActive(errors.length === 0);
 
-        // Устанавливаем новый массив сообщений об ошибках
         setErrorMessages([...errors]);
 
         return errors.length === 0;
@@ -84,6 +88,12 @@ const Profile = ({ onSignOut, onUpdateUser }) => {
         if (validateForm()) {
             setIsEditMode(false);
             setErrorMessages([]);
+            onUpdateUser({
+                email: email,
+                name: username,
+            });
+            setInitialUsername(username);
+            setInitialEmail(email);
         }
     };
 
