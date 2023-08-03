@@ -195,12 +195,17 @@ function App() {
         }
     };
 
-    const getMovies = (name = '') => {
+    const getMovies = (name = '', isShort = false) => {
         setIsLoader(true);
         moviesApi
             .getMovies()
             .then((dataMovies) => {
-                setMovies([...filterMovies(dataMovies, name)]);
+                // Применяем фильтры к фильмам на основе имени и состояния чекбокса
+                let filteredMovies = filterMovies(dataMovies, name);
+                if (isShort) {
+                    filteredMovies = filteredMovies.filter((movie) => movie.duration <= 40);
+                }
+                setMovies(filteredMovies);
             })
             .catch(() => errorGetMoviesPopupOpen())
             .finally(() => {

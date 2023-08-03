@@ -25,34 +25,30 @@ const Movies = ({ movies, savedMovies, pinMovie, unpinMovie, isLoader, onInputSe
         return localStorage.getItem('name') || '';
     };
 
-    const handleSearchSubmit = (name) => {
+    const handleSearchSubmit = (name, isChecked) => {
         localStorage.setItem('name', name);
         setInitialName(name);
+        setIsChecked(isChecked);
     };
-
-    useEffect(() => {
-        setFoundMovies(filterMovies(movies, initialName));
-    }, [movies, initialName]);
 
     useEffect(() => {
         setIsChecked(initialCheckbox());
         setInitialName(initialNameValue());
     }, []);
 
-    const handleInputChecked = (evt) => {
-        setIsChecked(evt.target.checked);
-        localStorage.setItem('checkbox', evt.target.checked);
-    };
+    useEffect(() => {
+        setFoundMovies(filterMovies(movies, initialName));
+    }, [movies, initialName]);
 
     return (
         <main className="movies">
             <SearchForm
                 onSubmit={handleSearchSubmit}
                 onInputSearchError={onInputSearchError}
-                handleInputChecked={handleInputChecked}
                 isChecked={isChecked}
                 initialName={initialNameValue}
-            ></SearchForm>
+                handleInputChecked={setIsChecked}
+            />
             {isLoader ? <Preloader /> : ''}
             <MoviesCardList>
                 <RenderMovies
@@ -69,4 +65,5 @@ const Movies = ({ movies, savedMovies, pinMovie, unpinMovie, isLoader, onInputSe
         </main>
     );
 };
+
 export default Movies;

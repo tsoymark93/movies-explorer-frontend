@@ -1,21 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
-import useInput from '../../utils/useInput';
 import { useLocation } from 'react-router-dom';
 
 const SearchForm = ({ onSubmit, onInputSearchError, initialName = '', isChecked, handleInputChecked }) => {
-    const searchInput = useInput({});
+    const [searchValue, setSearchValue] = useState(initialName);
     const location = useLocation();
+    const searchInputRef = useRef(null);
 
     useEffect(() => {
-        searchInput.setValue(initialName);
+        setSearchValue(initialName);
     }, [initialName]);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        if (location.pathname == '/movies') localStorage.setItem('name', searchInput.value);
-        searchInput.value != '' ? onSubmit(searchInput.value) : onInputSearchError();
+        if (location.pathname === '/movies') localStorage.setItem('name', searchValue);
+        if (searchValue !== '') {
+            onSubmit(searchValue, isChecked);
+        } else {
+            onInputSearchError();
+        }
+    };
+
+    const handleInputChange = (evt) => {
+        setSearchValue(evt.target.value);
+    };
+
+    const handleCheckboxChange = () => {
+        handleInputChecked((prevValue) => !prevValue);
+        onSubmit(searchValue, !isChecked);
     };
 
     return (
@@ -24,15 +37,16 @@ const SearchForm = ({ onSubmit, onInputSearchError, initialName = '', isChecked,
                 <input
                     className="search-form__input"
                     placeholder="Фильм"
-                    onChange={searchInput.onChange}
-                    defaultValue={initialName}
+                    onChange={handleInputChange}
                     required
-                    value={searchInput.value}
+                    value={searchValue}
+                    ref={searchInputRef}
                 />
                 <button className="link search-form__button" type="submit" />
             </div>
-            <FilterCheckbox onChange={handleInputChecked} isChecked={isChecked} />
+            <FilterCheckbox onChange={handleCheckboxChange} isChecked={isChecked} />
         </form>
     );
 };
+
 export default SearchForm;
