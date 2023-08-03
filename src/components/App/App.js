@@ -40,6 +40,16 @@ function App() {
     const [movies, setMovies] = useState([]);
     const [savedMovies, setSavedMovies] = useState([]);
     const routesRedirectLogined = ['/signin', '/signup'];
+    const [savedMoviesLoaded, setSavedMoviesLoaded] = useState(false);
+
+    const getLikedMoviesFromStorage = () => {
+        const likedMovies = localStorage.getItem('likedMovies');
+        return likedMovies ? JSON.parse(likedMovies) : {};
+    };
+
+    const saveLikedMoviesToStorage = (likedMovies) => {
+        localStorage.setItem('likedMovies', JSON.stringify(likedMovies));
+    };
 
     useEffect(() => {
         if (isTokenChecked && currentUser.isLoggedIn) {
@@ -170,14 +180,19 @@ function App() {
     };
 
     const getSavedMovies = (name = '') => {
-        return mainApi
-            .getMovies()
-            .then((data) => {
-                setSavedMovies([...filterMovies(data, name)]);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
+        if (savedMoviesLoaded) {
+            setSavedMovies([...filterMovies(savedMovies, name)]);
+        } else {
+            mainApi
+                .getMovies()
+                .then((data) => {
+                    setSavedMovies(data);
+                    setSavedMoviesLoaded(true);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        }
     };
 
     const getMovies = (name = '') => {
@@ -196,7 +211,12 @@ function App() {
     const createMovie = (movie) => {
         return mainApi
             .createMovie({ ...movie })
-            .then(() => getSavedMovies())
+            .then((createdMovie) => {
+                setSavedMovies([...savedMovies, createdMovie]);
+
+                const newLikedMovies = { ...getLikedMoviesFromStorage(), [createdMovie._id]: true };
+                saveLikedMoviesToStorage(newLikedMovies);
+            })
             .catch((res) => {
                 res.then((err) => {
                     console.log(err.message);
@@ -207,7 +227,12 @@ function App() {
     const removeMovie = (movie) => {
         return mainApi
             .removeMovie(movie)
-            .then(() => getSavedMovies())
+            .then(() => {
+                setSavedMovies(savedMovies.filter((item) => item._id !== movie._id));
+
+                const newLikedMovies = { ...getLikedMoviesFromStorage(), [movie._id]: false };
+                saveLikedMoviesToStorage(newLikedMovies);
+            })
             .catch((res) => {
                 res.then((err) => {
                     console.log(err.message);
