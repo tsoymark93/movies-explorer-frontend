@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react';
 import { filterShortMovies, filterMovies } from '../utils';
+import {
+    DESKTOP_WIDTH,
+    TABLET_WIDTH,
+    MOBILE_MOVIES,
+    MOBILE_MOVIES_ADD,
+    TABLES_MOVIES,
+    TABLET_MOVIES_ADD,
+    DESKTOP_MOVIES,
+    DESKTOP_MOVIES_ADD,
+} from '../constants';
 
 const useMoviesDisplay = ({ movies, isChecked, initialName }) => {
     const [windowSize, setWindowsSize] = useState(window.innerWidth);
@@ -18,12 +28,12 @@ const useMoviesDisplay = ({ movies, isChecked, initialName }) => {
     }, []);
 
     useEffect(() => {
-        if (windowSize >= 1280) {
-            setCountMovies(12);
-        } else if (windowSize >= 768) {
-            setCountMovies(8);
+        if (windowSize >= DESKTOP_WIDTH) {
+            setCountMovies(DESKTOP_MOVIES);
+        } else if (windowSize >= TABLET_WIDTH) {
+            setCountMovies(TABLES_MOVIES);
         } else {
-            setCountMovies(5);
+            setCountMovies(MOBILE_MOVIES);
         }
     }, [windowSize]);
 
@@ -34,12 +44,12 @@ const useMoviesDisplay = ({ movies, isChecked, initialName }) => {
     }, [countMovies, movies, isChecked, initialName]);
 
     const handleButtonMore = () => {
-        if (windowSize >= 1280) {
-            setCountMovies((prevCount) => prevCount + 3);
-        } else if (windowSize >= 768) {
-            setCountMovies((prevCount) => prevCount + 2);
+        if (windowSize >= DESKTOP_WIDTH) {
+            setCountMovies((prevCount) => prevCount + DESKTOP_MOVIES_ADD);
+        } else if (windowSize >= TABLET_WIDTH) {
+            setCountMovies((prevCount) => prevCount + TABLET_MOVIES_ADD);
         } else {
-            setCountMovies((prevCount) => prevCount + 2);
+            setCountMovies((prevCount) => prevCount + MOBILE_MOVIES_ADD);
         }
     };
 
