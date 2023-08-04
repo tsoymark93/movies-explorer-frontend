@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import './Profile.css';
-import '../Auth/Auth.css';
 import AuthTitle from '../AuthTitle/AuthTitle';
 import AuthInput from '../AuthInput/AuthInput';
 import AuthSubmit from '../AuthSubmit/AuthSubmit';
+import { validateName, validateEmail } from '../../utils/validation';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const Profile = ({ onSignOut, onUpdateUser, errorSubmitApi, clearErrorSubmitApi }) => {
     const currentUser = useContext(CurrentUserContext);
 
-    const [initialUsername, setInitialUsername] = useState(currentUser.name || '');
-    const [initialEmail, setInitialEmail] = useState(currentUser.email || '');
-    const [username, setUsername] = useState(initialUsername);
-    const [email, setEmail] = useState(initialEmail);
+    const [username, setUsername] = useState(currentUser.name || '');
+    const [email, setEmail] = useState(currentUser.email || '');
     const [isEditMode, setIsEditMode] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
     const saveButtonStyleClass = 'auth__button-submit_type_profile-save';
@@ -25,18 +23,20 @@ const Profile = ({ onSignOut, onUpdateUser, errorSubmitApi, clearErrorSubmitApi 
     const [isUsernameValid, setIsUsernameValid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true);
 
+    // Using useRef to hold the initial username and email values
+    const initialUsernameRef = useRef(currentUser.name || '');
+    const initialEmailRef = useRef(currentUser.email || '');
+
     useEffect(() => {
-        setUsername(currentUser.name || '');
-        setEmail(currentUser.email || '');
-        setInitialUsername(currentUser.name || '');
-        setInitialEmail(currentUser.email || '');
+        initialUsernameRef.current = currentUser.name || '';
+        initialEmailRef.current = currentUser.email || '';
     }, [currentUser]);
 
     useEffect(() => {
-        const isUsernameChanged = username !== initialUsername;
-        const isEmailChanged = email !== initialEmail;
+        const isUsernameChanged = username !== initialUsernameRef.current;
+        const isEmailChanged = email !== initialEmailRef.current;
         setIsSaveButtonActive(isEditMode && (isUsernameChanged || isEmailChanged));
-    }, [username, email, initialUsername, initialEmail, isEditMode]);
+    }, [username, email, isEditMode]);
 
     const validateForm = () => {
         const errors = [];
@@ -44,27 +44,20 @@ const Profile = ({ onSignOut, onUpdateUser, errorSubmitApi, clearErrorSubmitApi 
         const trimmedUsername = username.trim();
         const trimmedEmail = email.trim();
 
-        const nameRegex = /^[A-Za-zА-Яа-яЁё\s-]+$/;
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const usernameValidationResult = validateName(trimmedUsername);
+        const emailValidationResult = validateEmail(trimmedEmail);
 
         if (isEditMode) {
-            if (trimmedUsername === '') {
-                errors.push('Пожалуйста, введите имя.');
-            } else if (!nameRegex.test(trimmedUsername)) {
-                errors.push('Имя может содержать только буквы, пробелы и дефисы.');
-            } else if (trimmedUsername.length < 2) {
-                errors.push('Имя должно содержать минимум две буквы.');
+            if (usernameValidationResult !== '') {
+                errors.push(usernameValidationResult);
             }
-
-            if (trimmedEmail === '') {
-                errors.push('Пожалуйста, введите email.');
-            } else if (!emailRegex.test(trimmedEmail)) {
-                errors.push('Пожалуйста, введите корректный email.');
+            if (emailValidationResult !== '') {
+                errors.push(emailValidationResult);
             }
         }
 
-        setIsUsernameValid(nameRegex.test(trimmedUsername) && trimmedUsername.length >= 2);
-        setIsEmailValid(emailRegex.test(trimmedEmail));
+        setIsUsernameValid(usernameValidationResult === '');
+        setIsEmailValid(emailValidationResult === '');
 
         setIsSaveButtonActive(errors.length === 0);
 
@@ -98,8 +91,6 @@ const Profile = ({ onSignOut, onUpdateUser, errorSubmitApi, clearErrorSubmitApi 
             }).then(() => {
                 clearErrorSubmitApi();
             });
-            setInitialUsername(username);
-            setInitialEmail(email);
         }
     };
 
