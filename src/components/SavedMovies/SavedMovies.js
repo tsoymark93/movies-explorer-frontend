@@ -14,10 +14,6 @@ const SavedMovies = ({ movies, isLoader, unpinMovie, onInputSearchError }) => {
         setFoundMovies(filterMovies(movies, name));
     };
 
-    const handleInputChecked = (evt) => {
-        setIsChecked(evt.target.checked);
-    };
-
     useEffect(() => {
         setFoundMovies(movies);
     }, [movies]);
@@ -29,7 +25,7 @@ const SavedMovies = ({ movies, isLoader, unpinMovie, onInputSearchError }) => {
                 onSubmit={handleSearchSubmit}
                 isChecked={isChecked}
                 onInputSearchError={onInputSearchError}
-                handleInputChecked={handleInputChecked}
+                handleInputChecked={() => setIsChecked(!isChecked)}
             />
             {isLoader ? <Preloader /> : ''}
             <MoviesCardList>

@@ -27,7 +27,7 @@ const SearchForm = ({ onSubmit, onInputSearchError, initialName = '', isChecked,
     };
 
     const handleCheckboxChange = () => {
-        handleInputChecked((prevValue) => !prevValue);
+        handleInputChecked();
         onSubmit(searchValue, !isChecked);
     };
 
