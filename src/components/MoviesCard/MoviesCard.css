@@ -28,6 +28,11 @@
     font-style: normal;
     color: #8B8B8B
 }
+
+.movies__card-trailerLink {
+    background-color: #222222;
+    border: none;
+}
   
 .movies__card-button {
     position: relative;
@@ -52,7 +57,7 @@
     background-position: center;
 }
 
-.movies__card-button_type_liked {
+.movies__card-button_pined{
     background-size: 12px;
     background-image: url('../../images/CLOSE.svg');
 }
@@ -60,4 +65,19 @@
 .movies__card-image {
     width: 100%;
     object-fit: cover;
+}
+
+@media screen and (min-width: 768px) {
+    .movies__card-image {
+        object-fit: contain;
+        height: 190px;
+        justify-self: center;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .movies__card-image {
+        object-fit: contain;
+        height: 203px
+    }
 }

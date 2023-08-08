@@ -11,6 +11,8 @@ const AuthSubmit = ({
     onClick,
     customStyleClass,
     disabled,
+    textInfoSubmit,
+    onSignOut,
 }) => {
     const classContainer = `auth__submit-container${isProfile ? ' auth__submit-container_type_profile' : ''}`;
     const classButton = `link auth__button-submit${isProfile ? ' auth__button-submit_type_profile' : ''} ${
@@ -18,12 +20,22 @@ const AuthSubmit = ({
     }`;
     const classText = `auth__text${isProfile ? ' auth__text_type_profile' : ''}`;
     const classLink = `link auth__link${isProfile ? ' auth__link_type_profile' : ''}`;
+    const linkTextUrl = isProfile ? (
+        <a onClick={onSignOut} className={classLink}>
+            {textLink}
+        </a>
+    ) : (
+        <Link to={urlLinkSubmit} className={classLink}>
+            {textLink}
+        </Link>
+    );
 
     return (
         <div className={classContainer}>
+            <span className="auth__submit-error">{textInfoSubmit}</span>{' '}
             <button
                 className={`${classButton} ${disabled ? 'disabled' : ''}`}
-                type="button"
+                type="submit"
                 onClick={onClick}
                 disabled={disabled} // Используем атрибут disabled на самой кнопке
             >
@@ -31,9 +43,7 @@ const AuthSubmit = ({
             </button>
             <p className={classText}>
                 {textPreLink}
-                <Link to={urlLinkSubmit} className={classLink}>
-                    {textLink}
-                </Link>
+                {linkTextUrl}
             </p>
         </div>
     );
